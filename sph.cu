@@ -4,12 +4,8 @@
 #include <fstream>
 #include <iostream>
 #include <math.h>
-#include <omp.h>
-using namespace std;
-#define CHUNKSIZE                                                              \
-  40 // chunk size of each thread to be used by dynamic/guided process type
-#define THREAD_NUM 16
 
+using namespace std;
 using namespace cuda::experimental::stf;
 
 // Globals
@@ -81,8 +77,8 @@ void print2file(context &ctx, const logical_data<slice<double>> la,
   ctx.host_launch(la.read()).set_symbol("print2file")->*[=](auto a) {
     // Print pointer to file
     ofstream myfile(path, ios_base::app);
-    for (int jj = 0; jj < la.shape().size(); jj++) {
-      myfile << a(ii * cols + jj) << " ";
+    for (int i = 0; i < la.shape().size(); i++) {
+      myfile << a(i) << " ";
     }
     myfile << endl;
     myfile.close();
