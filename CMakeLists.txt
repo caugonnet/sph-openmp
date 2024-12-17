@@ -37,8 +37,6 @@ endif()
 
 # If you're building an executable
 add_executable(sph sph.cu)
-add_executable(sph-omp sph-omp.cpp)
-
 target_link_libraries(sph PUBLIC cuda)
 
 if (CMAKE_CUDA_COMPILER)
@@ -49,3 +47,12 @@ if (CMAKE_CUDA_COMPILER)
 endif()
 
 target_link_libraries(sph PRIVATE CCCL::CCCL CCCL::cudax)
+
+find_package(OpenMP REQUIRED)
+add_executable(sph-omp sph-omp.cpp)
+# Link OpenMP to the target
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(sph-omp PUBLIC OpenMP::OpenMP_CXX)
+endif()
+
+
